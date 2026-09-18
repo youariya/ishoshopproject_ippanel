@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>استعلام مشتری | آی شو شاپ</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="icon" type="image/svg+xml" href="/img/favicon.svg">
+  <link rel="stylesheet" href="../css/fonts.css">
+  <link rel="stylesheet" href="../css/shared.css">
+  <link rel="stylesheet" href="/customer-inquiry/customerInquiryForm.css">
+</head>
+<body>
+  <div class="logout-btn-wrap">
+    <button class="logout-btn-top" id="logoutBtn">
+      <svg viewBox="0 0 48 48" fill="none" stroke="#fff" stroke-width="2.2"><path d="M17 12v-3a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4v30a4 4 0 0 1-4 4H21a4 4 0 0 1-4-4v-3"/><path d="M9 24h22M9 24l7-7M9 24l7 7"/></svg>
+      <span>خروج</span>
+    </button>
+  </div>
+
+  <div class="container-main">
+    <div class="header-title">استعلام مشتریان</div>
+    <div class="form-beauty-wrap">
+      
+      <div class="tab-nav">
+        <button class="tab-btn active" data-tab="inquiry">استعلام با شماره</button>
+        <button class="tab-btn" data-tab="debtors">لیست بدهکاران</button>
+      </div>
+
+      <div class="tab-content-wrapper">
+        <div id="inquiry-tab" class="tab-content active">
+          <div class="input-group">
+            <input type="tel" id="phone" class="input-style" placeholder="شماره موبایل مشتری..." maxlength="11">
+            <button id="inquiryBtn" class="lookup-btn">استعلام</button>
+          </div>
+        </div>
+
+        <div id="debtors-tab" class="tab-content">
+          </div>
+      </div>
+      
+      <div id="result-container" class="result-container">
+        </div>
+
+    </div>
+    <div class="shop-sign">گالری کیف و کفش آی شو شاپ</div>
+  </div>
+
+  <footer class="footer-bar">
+    <div class="brand-footer">
+      <img src="/img/logo.svg" alt="System-Tick Logo">
+      <div>طراحی و توسعه توسط System-Tick Automation</div>
+    </div>
+  </footer>
+
+  <div id="logoutModal" class="modal-overlay">
+    <div class="modal-box">
+        <h3 class="modal-title confirm">خروج از سیستم</h3>
+        <p class="modal-message">آیا برای خروج از حساب کاربری خود اطمینان دارید؟</p>
+        <div class="modal-actions">
+            <button id="logoutConfirmBtn" class="modal-btn primary">بله، خارج شو</button>
+            <button id="logoutCancelBtn" class="modal-btn secondary">انصراف</button>
+        </div>
+    </div>
+  </div>
+  
+  <script src="/customer-inquiry/customerInquiryForm.js"></script>
+</body>
+</html>

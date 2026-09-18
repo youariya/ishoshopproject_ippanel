@@ -1,0 +1,228 @@
+/* public/login/login.css (نسخه نهایی با ابعاد اصلاح شده برای PC) */
+
+@font-face {
+  font-family: 'Shabnam';
+  src: url('../fonts/Shabnam.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Shabnam';
+  src: url('../fonts/Shabnam-Bold.woff2') format('woff2');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html, body {
+  font-family: 'Shabnam', Tahoma, Arial, sans-serif;
+  direction: rtl;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+.login-bg {
+  background: linear-gradient(180deg, #0F4C81 50%, #eaf6fb 50%);
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
+
+.login-card {
+  background: #fff;
+  border-radius: 2rem 2rem 2rem 5rem;
+  box-shadow: 0 15px 40px rgba(0, 100, 130, 0.1);
+  width: 90%;
+  max-width: 390px; /* اندازه پایه برای موبایل */
+  padding: 2.3rem 2.2rem;
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  transition: all 0.3s ease-in-out;
+}
+
+.logo-img {
+  width: 176px; /* اندازه پایه برای موبایل */
+  height: 176px;
+  margin-bottom: 1.5rem;
+  display: inline-block;
+  transition: all 0.3s ease-in-out;
+}
+
+#loginForm {
+  width: 100%;
+}
+
+.input-wrapper {
+  position: relative;
+  width: 100%;
+  margin-bottom: 1.2rem;
+}
+
+.input-style {
+  border-radius: 9999px;
+  padding: 0.8rem 1.1rem;
+  border: 1.5px solid #b0d6e6;
+  background: #f4fbfd;
+  width: 100%;
+  font-size: 1.01rem;
+  outline: none;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+.input-style::placeholder {
+  color: #7e9eaf;
+}
+.input-style:focus {
+  border-color: #007ea7;
+  background: #eaf6fb;
+  box-shadow: 0 0 0 4px rgba(0, 126, 167, 0.1);
+}
+
+.password-wrapper .input-style {
+  padding-left: 3.5rem;
+}
+
+.password-eye {
+  position: absolute;
+  left: 1rem; top: 50%;
+  transform: translateY(-50%);
+  background: none; border: none; cursor: pointer;
+  padding: 0.25rem; display: flex; align-items: center;
+}
+.password-eye svg { width: 24px; height: 24px; color: #7e9eaf; }
+
+.remember-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 1.5rem;
+  font-size: 0.98rem; /* اندازه پایه */
+  color: #003442;
+}
+#rememberMe {
+  width: 1.1em; /* اندازه پایه */
+  height: 1.1em;
+  accent-color: #007ea7;
+}
+
+.login-btn {
+  width: 100%;
+  padding: 0.9rem 0;
+  border-radius: 9999px;
+  background: linear-gradient(90deg, #00b4d8 30%, #48cae4 100%);
+  color: #fff;
+  font-weight: bold;
+  font-size: 1.13rem; /* اندازه پایه */
+  border: none;
+  margin-bottom: 0.7rem;
+  letter-spacing: 1px;
+  transition: all 0.2s;
+  box-shadow: 0 2px 12px rgba(144, 224, 239, 0.2);
+  cursor: pointer;
+}
+.login-btn:hover {
+  background: linear-gradient(90deg, #00a1bd 30%, #35c0db 100%);
+  box-shadow: 0 4px 15px rgba(144, 224, 239, 0.5);
+}
+.login-btn:disabled {
+  background: #a0a0a0;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.forgot-link {
+  display: block;
+  color: #f15412;
+  font-size: 0.99rem; /* اندازه پایه */
+  text-align: center;
+  margin-top: 0.7rem;
+  text-decoration: none;
+}
+.forgot-link:hover { text-decoration: underline; }
+
+.login-footer {
+  position: fixed;
+  bottom: 1.3rem;
+  left: 0; right: 0;
+  color: #777;
+  font-size: 0.94rem;
+  text-align: center;
+  letter-spacing: 0.5px;
+}
+
+.alert-box {
+  margin-bottom: 1.1rem;
+  color: #b91c1c;
+  background: #fee2e2;
+  border-radius: 1rem;
+  padding: 0.8rem 1.1rem;
+  font-size: 1.01rem;
+  text-align: center;
+  border: 1px solid #f87171;
+  font-family: inherit;
+  display: none;
+}
+.alert-box.success {
+  color: #15803d;
+  background: #dcfce7;
+  border-color: #4ade80;
+}
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 480px) {
+  .login-card {
+    padding: 2rem 1.5rem;
+  }
+}
+
+/* افزایش اندازه برای PC و لپ‌تاپ */
+@media (min-width: 768px) {
+  .login-card {
+    max-width: 510px; /* ۳۰٪ بزرگتر از ۳۹۰ پیکسل */
+    padding: 2.8rem 3rem;
+  }
+
+  .logo-img {
+    width: 264px; /* ۵۰٪ بزرگتر از ۱۷۶ پیکسل */
+    height: 264px;
+    margin-bottom: 2rem;
+  }
+
+  .input-style {
+    font-size: 1.1rem; /* ۳۰٪ بزرگتر */
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+  }
+
+  .remember-row {
+    font-size: 1.37rem; /* ۴۰٪ بزرگتر */
+  }
+  #rememberMe {
+      width: 1.4em; /* ۴۰٪ بزرگتر */
+      height: 1.4em;
+  }
+
+  .login-btn {
+    font-size: 1.58rem; /* ۴۰٪ بزرگتر */
+    padding-top: 1.1rem;
+    padding-bottom: 1.1rem;
+  }
+
+  .forgot-link {
+    font-size: 1.38rem; /* ۴۰٪ بزرگتر */
+  }
+}

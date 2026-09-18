@@ -1,0 +1,30 @@
+/* public/bulksms/bulkSMSForm.css */
+:root { --primary-blue: #13bbdd; --text-dark: #0b4b5f; --border-color: #d1eef6; }
+.sms-title { color: var(--text-dark); font-weight: 800; font-size: 1.2rem; margin-bottom: 1.5rem; }
+.form-input { width: 100%; border: 2px solid #13bbdd40; border-radius: 1.1rem; padding: 0.8rem 1.1rem; font-size: 1rem; color: var(--text-dark); transition: all 0.2s ease-in-out; background-color: #fcfdfe; }
+.form-input::placeholder { color: #8cb5c2; }
+.form-input:focus { outline: none; border-color: var(--primary-blue); box-shadow: 0 0 0 4px #13bbdd1a; }
+.controls-wrapper { display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 1rem; width: 100%; }
+@media (min-width: 768px) { .form-beauty-wrap { max-width: 700px; padding: 2rem; } .controls-wrapper { flex-direction: row; } }
+.select-all-box { display: flex; align-items: center; gap: 0.75rem; padding: 0.5rem; width: 100%; }
+.custom-checkbox { width: 1.25rem; height: 1.25rem; accent-color: var(--primary-blue); cursor: pointer; }
+.select-all-label { font-weight: bold; color: #1e5a70; user-select: none; cursor: pointer; }
+.selected-count { font-size: 0.85rem; color: #475569; margin-bottom: 0.5rem; text-align: right; height: 1.2rem; width: 100%; font-weight: bold; }
+.scroll-wrapper { width: 100%; border: 2px solid #13bbdd26; border-radius: 1rem; max-height: 250px; overflow-y: auto; background-color: #fdfeff; }
+.customer-table { width: 100%; border-collapse: collapse; }
+.customer-table th { position: sticky; top: 0; background-color: #eaf9fd; padding: 0.8rem; font-size: 0.9rem; text-align: right; font-weight: bold; color: var(--text-dark); border-bottom: 2px solid var(--border-color); }
+.customer-table td { padding: 0.8rem; font-size: 0.9rem; border-top: 1px solid #eaf9fd; color: #1e3a46; }
+.customer-table tr:hover { background-color: #f0fafc; }
+.customer-table tr.selected-row { background-color: #e0f2fe; font-weight: bold; }
+.customer-table tr.selected-row:hover { background-color: #bae6fd; }
+.textarea-wrapper { position: relative; width: 100%; }
+textarea#messageInput { font-family: 'Shabnam', sans-serif; font-size: 1.05rem; line-height: 1.8; color: #083344; min-height: 120px; resize: vertical; margin-top: 1.5rem; }
+.char-counter { position: absolute; bottom: 12px; left: 12px; font-size: 0.8rem; color: #497d8f; background: #eaf9fd; padding: 2px 8px; border-radius: 7px; }
+.preview-box { width: 100%; background-color: #f3f9fb; border: 1px dashed var(--border-color); border-radius: 1rem; padding: 1rem; margin-top: 1rem; font-size: 0.95rem; display: none; }
+.preview-name { font-weight: bold; color: var(--text-dark); }
+#previewMsg { display: inline; color: #35535f; }
+.preview-shop { margin-top: 0.5rem; color: var(--text-dark); font-weight: bold; }
+.sms-form { width: 100%; }
+.spinner { width: 32px; height: 32px; border: 4px solid var(--border-color); border-top-color: var(--primary-blue); border-radius: 50%; animation: spin 1s linear infinite; }
+.loading-cell { text-align: center; padding: 2rem; }
+@keyframes spin { to { transform: rotate(360deg); } }

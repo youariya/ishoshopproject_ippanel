@@ -1,0 +1,81 @@
+# =============================
+# ✅ NODE.JS & NPM
+# =============================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+.env
+
+# =============================
+# ✅ LOGS & TEMP FILES
+# =============================
+logs/
+*.log
+*.tmp
+*.swp
+*.bak
+
+# =============================
+# ✅ OS-SPECIFIC FILES
+# =============================
+.DS_Store
+Thumbs.db
+ehthumbs.db
+desktop.ini
+
+# =============================
+# ✅ IDE / EDITOR FILES
+# =============================
+.vscode/
+.idea/
+*.code-workspace
+
+# =============================
+# ✅ ENVIRONMENT & TOKENS
+# =============================
+.env.local
+.env.development
+.env.production
+.env.test
+.env.*.local
+*.secret
+*.pem
+*.key
+*.crt
+
+# =============================
+# ✅ BUILD / DIST / PUBLIC ARTIFACTS
+# (در صورت اضافه شدن فرآیند build)
+# =============================
+dist/
+build/
+public/build/
+.cache/
+.cypress_cache/
+coverage/
+
+# =============================
+# ✅ DATABASE / BACKUP / DUMP
+# (در صورت استفاده آتی)
+# =============================
+*.sqlite
+*.db
+*.sqlite3
+*.dump
+*.sql
+*.bak
+
+# =============================
+# ✅ PM2 Ecosystem (در صورت استفاده)
+# =============================
+ecosystem.config.js
+
+# =============================
+# ✅ TEST & DEBUG
+# =============================
+test-results/
+__tests__/
+*.spec.js
+*.test.js

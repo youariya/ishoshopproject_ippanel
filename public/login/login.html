@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <title>ورود به سیستم | آی شو شاپ</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="icon" type="image/svg+xml" href="/img/favicon.svg">
+  <link rel="stylesheet" href="/login/login.css">
+</head>
+<body>
+  <div class="login-bg"></div>
+  <div class="login-card">
+    <img src="../img/logo.svg" alt="System-Tick Logo" class="logo-img">
+    
+    <form id="loginForm" autocomplete="off">
+      <h2 class="form-title">ورود به سیستم</h2>
+      <div id="loginAlertBox" class="alert-box"></div>
+      <div class="input-wrapper">
+        <input id="username" type="text" class="input-style" placeholder="نام کاربری" autocomplete="username" required>
+      </div>
+      <div class="input-wrapper password-wrapper">
+        <input id="password" type="password" class="input-style" placeholder="رمز عبور" autocomplete="current-password" required>
+        </div>
+      <button type="submit" class="login-btn">ورود</button>
+    </form>
+
+    <form id="setPasswordForm" autocomplete="off" style="display: none;">
+      <h2 class="form-title">تغییر رمز عبور</h2>
+      <p class="form-subtitle">برای امنیت بیشتر، لطفاً یک رمز عبور جدید برای خود انتخاب کنید.</p>
+      <div id="setPasswordAlertBox" class="alert-box"></div>
+      <div class="input-wrapper">
+        <input id="newPassword" type="password" class="input-style" placeholder="رمز عبور جدید" required>
+      </div>
+      <div class="input-wrapper">
+        <input id="confirmPassword" type="password" class="input-style" placeholder="تکرار رمز عبور جدید" required>
+      </div>
+      <button type="submit" class="login-btn">ثبت رمز عبور و ورود</button>
+    </form>
+
+  </div>
+  <div class="login-footer">تمام حقوق محفوظ است. SYSTEMTICK</div>
+  <script src="/login/login.js"></script>
+</body>
+</html>

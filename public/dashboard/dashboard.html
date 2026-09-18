@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>داشبورد مدیریت | آی شو شاپ</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="icon" type="image/svg+xml" href="/img/favicon.svg">
+  <link rel="stylesheet" href="../css/fonts.css">
+  <link rel="stylesheet" href="/dashboard/dashboard.css">
+</head>
+<body>
+
+  <header class="main-header">
+    <div class="brand-info">
+      <img src="/img/logo.svg" alt="آی شو شاپ لوگو" class="shop-logo">
+      <h1>داشبورد مدیریت آی شو شاپ</h1>
+    </div>
+    <div class="user-actions">
+      <span id="currentDate" class="current-date"></span>
+      <button class="logout-btn" id="logoutBtn" title="خروج از سیستم">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+        <span>خروج</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="container-main">
+
+    <section class="kpi-grid">
+      <div class="kpi-card total-debt">
+        <div class="kpi-header">
+          <span class="kpi-title">مجموع بدهی مشتریان (تومان)</span>
+          <svg class="kpi-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+        </div>
+        <div id="totalDebt" class="kpi-value loading"><span></span><span></span><span></span></div>
+      </div>
+      <div class="kpi-card total-customers">
+        <div class="kpi-header">
+          <span class="kpi-title">تعداد کل مشتریان</span>
+          <svg class="kpi-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+        </div>
+        <div id="customerCount" class="kpi-value loading"><span></span><span></span></div>
+      </div>
+      <div class="kpi-card new-payments">
+        <div class="kpi-header">
+          <span class="kpi-title">پرداختی‌های امروز</span>
+          <svg class="kpi-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+        </div>
+        <div id="todayPayments" class="kpi-value loading"><span></span></div>
+      </div>
+    </section>
+
+    <div class="dashboard-layout">
+      
+      <aside class="quick-actions-panel">
+        <h2>اقدامات سریع</h2>
+        <div class="actions-grid">
+          <button class="action-card" data-form="customer">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="17" y1="11" x2="23" y2="11"></line></svg>
+            <span class="action-title">مشتری جدید</span>
+          </button>
+          <button class="action-card" data-form="payment">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+            <span class="action-title">ثبت پرداخت</span>
+          </button>
+          <button class="action-card" data-form="debt">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="9" y1="15" x2="15" y2="15"></line></svg>
+            <span class="action-title">ثبت بدهی</span>
+          </button>
+          <button class="action-card" data-form="bulkSMS">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m21 2-10 10-2-2"></path><path d="m21 12-10 10-2-2"></path></svg>
+            <span class="action-title">پیامک گروهی</span>
+          </button>
+        </div>
+      </aside>
+
+      <section class="main-content-panel">
+        <div class="inquiry-module">
+            <div class="tab-nav">
+                <button class="tab-btn active" data-tab="inquiry-by-number">استعلام با شماره</button>
+                <button class="tab-btn" data-tab="all-debtors-list">لیست تمام بدهکاران</button>
+            </div>
+
+            <div class="tab-content-wrapper">
+                <div id="inquiry-by-number" class="tab-content active">
+                    <p>برای مشاهده اطلاعات مشتری، شماره موبایل او را وارد کنید.</p>
+                    <div class="search-wrapper">
+                        <input type="tel" id="customerSearchInput" placeholder="مثال: 09123456789">
+                        <button id="customerSearchBtn" class="primary-btn">جستجو</button>
+                    </div>
+                </div>
+                <div id="all-debtors-list" class="tab-content">
+                    <p>لیست تمام مشتریانی که بدهی فعال دارند در اینجا نمایش داده می‌شود.</p>
+                </div>
+            </div>
+            <div id="inquiryResultContainer" class="result-container">
+                </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <footer class="footer-bar">
+    <div class="brand-footer">
+      <img src="/img/logo-dark.svg" alt="System-Tick Logo">
+      <span>طراحی و توسعه توسط System-Tick Automation</span>
+    </div>
+  </footer>
+
+  <nav class="mobile-tab-bar">
+    <a href="#" class="tab-item" data-form="customer">
+      <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="17" y1="11" x2="23" y2="11"></line></svg>
+      <span class="tab-label">مشتری جدید</span>
+    </a>
+    <a href="#" class="tab-item" data-form="payment">
+      <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+      <span class="tab-label">ثبت پرداخت</span>
+    </a>
+    <a href="#" class="tab-item" data-form="debt">
+      <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="9" y1="15" x2="15" y2="15"></line></svg>
+      <span class="tab-label">ثبت بدهی</span>
+    </a>
+    <a href="#" class="tab-item" data-form="bulkSMS">
+      <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m21 2-10 10-2-2"></path><path d="m21 12-10 10-2-2"></path></svg>
+      <span class="tab-label">پیامک</span>
+    </a>
+    <a href="/dashboard/dashboard.html" class="tab-item active">
+        <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+      <span class="tab-label">داشبورد</span>
+    </a>
+  </nav>
+
+  <div id="logoutModal" class="modal-overlay">
+      <div class="modal-box">
+          <h3 class="modal-title confirm">خروج از سیستم</h3>
+          <p class="modal-message">آیا برای خروج از حساب کاربری خود اطمینان دارید؟</p>
+          <div class="modal-actions">
+              <button id="logoutConfirmBtn" class="modal-btn primary">بله، خارج شو</button>
+              <button id="logoutCancelBtn" class="modal-btn secondary">انصراف</button>
+          </div>
+      </div>
+  </div>
+  
+  <script src="dashboard.js"></script>
+
+</body>
+</html>

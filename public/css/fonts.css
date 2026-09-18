@@ -1,0 +1,39 @@
+/* فونت شَبنم */
+@font-face {
+  font-family: 'Shabnam';
+  src: url('/fonts/Shabnam.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* فونت وزیرمتن */
+@font-face {
+  font-family: 'Vazirmatn';
+  src: url('/fonts/Vazir.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* فونت ساحل */
+@font-face {
+  font-family: 'Sahel';
+  src: url('/fonts/Sahel.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* فونت لاله‌زار */
+@font-face {
+  font-family: 'Lalezar';
+  src: url('/fonts/Lalezar.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* فونت تنها */
+@font-face {
+  font-family: 'Tanha';
+  src: url('/fonts/Tanha.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}

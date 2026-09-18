@@ -1,0 +1,162 @@
+/**** public/css/shared.css (کد کامل و نهایی) */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+/* --- General Body and Layout --- */
+html, body {
+    min-height: 100%;
+    background: #f5fbff;
+    font-family: 'Vazirmatn', 'Tanha', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+.container-main {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 2.7rem 1rem 1rem 1rem;
+    position: relative;
+    width: 100%;
+}
+.header-title {
+    font-size: 1.35rem;
+    font-weight: bold;
+    color: #212121;
+    letter-spacing: -1px;
+    margin: 0 0 1.2rem 0;
+    text-align: center;
+}
+.form-beauty-wrap {
+    width: 100%;
+    max-width: 440px;
+    background: #ffffff;
+    border-radius: 1.5rem;
+    border: 2px solid #13bbdd26;
+    box-shadow: 0 6px 28px #13bbdd13;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* --- Logout Button --- */
+.logout-btn-wrap {
+    position: absolute;
+    top: 1.2rem;
+    left: 1.2rem;
+    z-index: 1100;
+}
+.logout-btn-top {
+    background: linear-gradient(92deg, #ff5e5e 0%, #e01010 100%);
+    color: #fff;
+    border: 2px solid #e01010;
+    border-radius: 1.3rem;
+    font-size: 1rem;
+    font-weight: 800;
+    padding: 0.7rem 1.1rem;
+    box-shadow: 0 4px 20px #ff5e5e17;
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.logout-btn-top svg { width: 20px; height: 20px; }
+.logout-btn-top:hover { background: linear-gradient(92deg, #e01010 0%, #ff5e5e 100%); border-color: #d10000; }
+
+/* --- Footer and Shop Sign --- */
+.shop-sign {
+    background: #e8f6fa;
+    color: #1594ba;
+    font-weight: 700;
+    text-align: center;
+    font-size: 1.08rem;
+    border-radius: 1rem;
+    margin: 1rem auto 0.9rem auto;
+    padding: 0.68rem 0;
+    width: 100%;
+    max-width: 440px;
+    border: 1px solid #b2e5f7;
+}
+.footer-bar {
+    margin-top: auto;
+    width: 100%;
+    padding: 0.5rem 0 1rem 0;
+    text-align: center;
+}
+.brand-footer img { height: 34px; margin-bottom: 4px; }
+.brand-footer div { font-size: 1rem; color: #299fc4; }
+
+/* --- Unified Modal System --- */
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background-color: rgba(10, 20, 30, 0.4);
+    backdrop-filter: blur(5px);
+    display: none;
+    align-items: center; justify-content: center;
+    z-index: 5000;
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+}
+.modal-overlay.show { display: flex; opacity: 1; }
+.modal-box {
+    background: #fff;
+    border-radius: 1.5rem;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+    transform: scale(0.95);
+    transition: transform 0.2s ease-in-out;
+}
+.modal-overlay.show .modal-box { transform: scale(1); }
+.modal-icon { width: 60px; height: 60px; margin: 0 auto 1rem auto; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+.modal-icon svg { width: 32px; height: 32px; color: #fff; }
+.modal-icon.success { background-color: #22c55e; }
+.modal-icon.error { background-color: #ef4444; }
+.modal-icon.confirm { background-color: #f59e0b; }
+.modal-title { font-size: 1.25rem; font-weight: 800; margin-bottom: 0.5rem; }
+.modal-title.success { color: #166534; }
+.modal-title.error { color: #991b1b; }
+.modal-title.confirm { color: #92400e; }
+.modal-message { font-size: 0.95rem; color: #4b5563; line-height: 1.6; margin-bottom: 1.5rem; }
+.modal-actions { display: flex; justify-content: center; gap: 1rem; }
+.modal-btn { border: none; padding: 0.7rem 1.5rem; border-radius: 0.75rem; font-weight: bold; cursor: pointer; transition: background-color 0.2s; font-size: 0.95rem; }
+.modal-btn.primary { background-color: #13bbdd; color: white; }
+.modal-btn.primary:hover { background-color: #0fa2be; }
+.modal-btn.secondary { background-color: #e5e7eb; color: #374151; }
+.modal-btn.secondary:hover { background-color: #d1d5db; }
+
+/* --- General Form Elements --- */
+.submit-btn { width: 100%; background: linear-gradient(92deg, #13bbdd 0%, #0fa2be 100%); color: white; font-size: 1.13rem; font-weight: 800; border: 2px solid #0fa2be; border-radius: 1.2rem; padding: 0.8rem 0; margin-top: 1rem; cursor: pointer; transition: all 0.15s; }
+.submit-btn:hover:not(:disabled) { background: linear-gradient(92deg, #0fa2be 0%, #13bbdd 100%); border-color: #0d8a9f; }
+.submit-btn:disabled { background: #94a3b8; border-color: #94a3b8; cursor: not-allowed; }
+
+/* --- Responsive Design Logic --- */
+@media (max-width: 600px) {
+    .container-main { padding-top: 5rem; }
+    .form-beauty-wrap { padding: 1.2rem 1rem; }
+    .shop-sign { font-size: 0.95rem; max-width: 100%;}
+    .logout-btn-wrap { top: 1rem; left: 1rem; }
+    .logout-btn-top { font-size: 0.9rem; padding: 0.6rem 0.9rem; gap: 0.3rem; }
+    .logout-btn-top span { display: none; }
+}
+
+@media (min-width: 768px) {
+    .form-beauty-wrap, .shop-sign {
+        max-width: 700px;
+    }
+}

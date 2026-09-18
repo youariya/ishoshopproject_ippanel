@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>ارسال پیامک گروهی | آی شو شاپ</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="icon" type="image/svg+xml" href="/img/favicon.svg">
+  <link rel="stylesheet" href="../../css/fonts.css">
+  <link rel="stylesheet" href="../../css/shared.css">
+  <link rel="stylesheet" href="/bulksms/bulkSMSForm.css">
+</head>
+<body>
+  <div class="logout-btn-wrap">
+    <button class="logout-btn-top" id="logoutBtn">
+      <svg viewBox="0 0 48 48" fill="none" stroke="#fff" stroke-width="2.2"><path d="M17 12v-3a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4v30a4 4 0 0 1-4 4H21a4 4 0 0 1-4-4v-3"/><path d="M9 24h22M9 24l7-7M9 24l7 7"/></svg>
+      <span>خروج</span>
+    </button>
+  </div>
+
+  <div class="container-main">
+    <div class="header-title">ارسال پیامک گروهی</div>
+    <div class="form-beauty-wrap">
+      <div class="sms-title">گیرندگان پیامک را انتخاب کنید</div>
+      
+      <div class="controls-wrapper">
+        <select id="customerFilter" class="form-input">
+          <option value="all">همه مشتریان</option>
+          <option value="debtors">فقط بدهکاران</option>
+          <option value="noDebt">بدون بدهی</option>
+        </select>
+        <input type="text" id="searchInput" class="form-input" placeholder="جستجوی نام یا شماره..." autocomplete="off">
+      </div>
+
+      <div class="select-all-box">
+        <input type="checkbox" id="selectAll" class="custom-checkbox" />
+        <label for="selectAll" class="select-all-label">انتخاب همه</label>
+      </div>
+      
+      <div id="selectedCount" class="selected-count"></div>
+
+      <div class="scroll-wrapper">
+        <table class="customer-table">
+          <thead>
+            <tr>
+              <th></th>
+              <th>نام مشتری</th>
+              <th>شماره موبایل</th>
+              <th>بدهی (تومان)</th>
+            </tr>
+          </thead>
+          <tbody id="customerList">
+            <tr><td colspan="4" class="loading-cell"><div class="spinner"></div></td></tr>
+          </tbody>
+        </table>
+      </div>
+      
+      <form id="smsForm" class="sms-form" autocomplete="off">
+        <div class="textarea-wrapper">
+          <textarea id="messageInput" class="form-input" placeholder="متن اصلی پیام را اینجا وارد کنید..."></textarea>
+          <div id="charCounter" class="char-counter">۰ کاراکتر / ۱ پیامک</div>
+        </div>
+        <div id="previewBox" class="preview-box">
+            <p><span class="preview-name">{نام مشتری} عزیز</span></p>
+            <p id="previewMsg"></p>
+            <p class="preview-shop">گالری کیف و کفش آی شو شاپ</p>
+        </div>
+        <button id="sendBtn" type="submit" class="submit-btn" disabled>گیرنده را انتخاب کنید</button>
+      </form>
+    </div>
+    
+    <div class="shop-sign">گالری کیف و کفش آی شو شاپ</div>
+  </div>
+
+  <footer class="footer-bar">
+    <div class="brand-footer">
+      <img src="/img/logo.svg" alt="System-Tick Logo">
+      <div>طراحی و توسعه توسط System-Tick Automation</div>
+    </div>
+  </footer>
+
+  <div id="unifiedModal" class="modal-overlay">
+    <div class="modal-box">
+      <div id="modalIcon" class="modal-icon"></div>
+      <h3 id="modalTitle" class="modal-title"></h3>
+      <p id="modalMessage" class="modal-message"></p>
+      <div id="modalActions" class="modal-actions">
+        </div>
+    </div>
+  </div>
+
+  <script src="/bulksms/bulkSMSForm.js"></script>
+</body>
+</html>

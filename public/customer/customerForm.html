@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>ثبت مشتری جدید | آی شو شاپ</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="icon" type="image/svg+xml" href="/img/favicon.svg">
+  <link rel="stylesheet" href="../css/fonts.css">
+  <link rel="stylesheet" href="../css/shared.css">
+  <link rel="stylesheet" href="/customer/customerForm.css">
+</head>
+<body>
+  <div class="logout-btn-wrap">
+    <button class="logout-btn-top" id="logoutBtn">
+      <svg viewBox="0 0 48 48" fill="none" stroke="#fff" stroke-width="2.2">
+        <path d="M17 12v-3a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4v30a4 4 0 0 1-4 4H21a4 4 0 0 1-4-4v-3"/>
+        <path d="M9 24h22M9 24l7-7M9 24l7 7"/>
+      </svg>
+      <span>خروج</span>
+    </button>
+  </div>
+
+  <div class="container-main">
+    <div class="header-title">ثبت مشتری جدید</div>
+    <div class="form-beauty-wrap">
+      <form id="customerForm" autocomplete="off">
+        <label for="name">نام و نام خانوادگی</label>
+        <input type="text" id="name" name="name" class="input-style" placeholder="مثال: علی رضایی" maxlength="40" required>
+        
+        <label for="phone">شماره موبایل</label>
+        <input type="tel" id="phone" name="phone" class="input-style" placeholder="مثال: 09123456789" maxlength="11" required pattern="09\d{9}">
+        
+        <label for="initialDebt">بدهی اولیه (تومان) <span class="optional-text">(اختیاری)</span></label>
+        <input type="text" id="initialDebt" name="initialDebt" class="input-style" placeholder="مثال: 500,000" maxlength="13" inputmode="numeric">
+        
+        <button type="submit" class="submit-btn">ثبت مشتری</button>
+      </form>
+    </div>
+    
+    <div class="shop-sign">
+      گالری کیف و کفش آی شو شاپ
+    </div>
+  </div>
+
+  <footer class="footer-bar">
+    <div class="brand-footer">
+      <img src="/img/logo.svg" alt="System-Tick Logo">
+      <div>طراحی و توسعه توسط System-Tick Automation</div>
+    </div>
+  </footer>
+
+  <div id="unifiedModal" class="modal-overlay">
+    <div class="modal-box">
+      <div id="modalIcon" class="modal-icon"></div>
+      <h3 id="modalTitle" class="modal-title"></h3>
+      <p id="modalMessage" class="modal-message"></p>
+      <div id="modalActions" class="modal-actions"></div>
+    </div>
+  </div>
+  
+  <script src="/customer/customerForm.js"></script>
+</body>
+</html>

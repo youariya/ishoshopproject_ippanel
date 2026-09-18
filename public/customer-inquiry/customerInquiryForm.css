@@ -1,0 +1,262 @@
+/* --- Tab Styles --- */
+.tab-nav {
+    width: 100%;
+    display: flex;
+    border-bottom: 2px solid #e2e8f0;
+    margin-bottom: 1.5rem;
+}
+.tab-btn {
+    flex: 1;
+    padding: 0.8rem 1rem;
+    border: none;
+    background-color: transparent;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #64748b;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -2px;
+}
+.tab-btn:hover {
+    background-color: #f8fafc;
+    color: #1e293b;
+}
+.tab-btn.active {
+    color: #13bbdd;
+    border-bottom-color: #13bbdd;
+}
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+.tab-content-wrapper { width: 100%; }
+
+/* --- Form Controls --- */
+.input-group { display: flex; width: 100%; gap: 0.5rem; }
+.input-style { flex-grow: 1; text-align: right; border-radius: 1rem; border: 2px solid #cbd5e1; padding: 0.8rem 1.1rem; font-size: 1rem; }
+.input-style:focus { outline: none; border-color: #13bbdd; box-shadow: 0 0 0 4px #13bbdd1a; }
+.lookup-btn { background-color: #13bbdd; color: white; border: none; border-radius: 1rem; padding: 0 1.5rem; font-weight: bold; cursor: pointer; transition: background-color 0.2s; }
+.lookup-btn:hover { background-color: #0fa2be; }
+
+/* --- Back Button --- */
+.back-to-list-wrapper {
+    margin-bottom: 1.25rem;
+    text-align: right;
+}
+.back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: #f1f5f9;
+    color: #475569;
+    border: 1px solid #e2e8f0;
+    font-weight: bold;
+    font-size: 0.95rem;
+    padding: 0.6rem 1.2rem;
+    border-radius: 2rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.back-btn:hover {
+    background-color: #e2e8f0;
+    color: #1e293b;
+    border-color: #cbd5e1;
+}
+.back-btn svg {
+    width: 1.25rem;
+    height: 1.25rem;
+    fill: currentColor;
+}
+
+/* --- Result Display --- */
+.result-container { width: 100%; min-height: 100px; }
+.result-title {
+    font-weight: bold;
+    font-size: 1.2rem;
+    color: #1f2937;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #e5e7eb;
+    text-align: center;
+}
+
+/* Enhanced Result Box */
+.result-box {
+    border: 1px solid #e2e8f0;
+    border-radius: 1.25rem;
+    padding: 1.25rem;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(145deg, #ffffff, #f7f9fc);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    text-align: center;
+}
+.result-box .customer-name {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #1e3a8a;
+    margin-bottom: 0.5rem;
+}
+.result-box .debt-stat {
+    font-size: 2.25rem;
+    font-weight: 800;
+    color: #dc2626;
+    margin-bottom: 0.75rem;
+    line-height: 1.1;
+}
+.result-box .debt-stat small {
+    font-size: 1.1rem;
+    font-weight: normal;
+    color: #be123c;
+    margin-right: 0.25rem;
+}
+.result-box .last-update {
+    font-size: 1.1rem;
+    color: #1f2937;
+    font-weight: 500;
+}
+
+/* Enhanced Error Box */
+.error-box {
+    border: 1px solid #fca5a5;
+    background-color: #fef2f2;
+    color: #b91c1c;
+    border-radius: 1rem;
+    padding: 1rem;
+    text-align: center;
+    font-weight: bold;
+}
+
+/* Total Debt Summary Box */
+.total-debt-summary {
+    background-color: #fffbeB;
+    border: 1px solid #fde68a;
+    border-radius: 0.75rem;
+    padding: 0.75rem 1rem;
+    margin-bottom: 1rem;
+    text-align: center;
+    font-weight: bold;
+    color: #b45309;
+}
+
+/* --- Standard Table Styles --- */
+.table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.75rem;
+}
+.trans-table { width: 100%; border-collapse: collapse; font-size: 1rem; }
+.trans-table th, .trans-table td { border-bottom: 1px solid #e5e7eb; padding: 0.85rem 1rem; text-align: center; white-space: nowrap; vertical-align: middle; }
+.trans-table tr:last-child td { border-bottom: none; }
+.trans-table th { background-color: #f9fafb; font-weight: bold; }
+.trans-table tbody tr:nth-child(even) {
+    background-color: #f9fafb;
+}
+.trans-table tbody tr.clickable-row {
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+.trans-table tbody tr.clickable-row:hover {
+    background-color: #eff6ff;
+}
+.trans-table .paid { color: #16a34a; }
+.trans-table .debt { color: #dc2626; }
+
+/* Styles for amount labels */
+.amount-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-weight: bold;
+}
+.trans-label {
+    font-size: 0.8rem;
+    padding: 0.1rem 0.5rem;
+    border-radius: 1rem;
+    font-weight: normal;
+}
+.trans-label.paid { background-color: #dcfce7; color: #15803d; }
+.trans-label.debt { background-color: #fee2e2; color: #b91c1c; }
+
+
+.loading-spinner { border: 4px solid #f3f4f6; border-top: 4px solid #13bbdd; border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; margin: 2rem auto; }
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+/* --- Mobile Responsive Views --- */
+@media (max-width: 767px) {
+    /* --- UX For Transactions Table (Card View) --- */
+    .transactions-list-wrapper {
+        border: none;
+        border-radius: 0;
+        overflow-x: visible;
+    }
+    .transactions-list-wrapper .trans-table thead {
+        display: none;
+    }
+    .transactions-list-wrapper .trans-table,
+    .transactions-list-wrapper .trans-table tbody,
+    .transactions-list-wrapper .trans-table tr,
+    .transactions-list-wrapper .trans-table td {
+        display: block;
+        width: 100% !important;
+    }
+    .transactions-list-wrapper .trans-table tr {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 0.75rem;
+        margin-bottom: 1rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+    .transactions-list-wrapper .trans-table td {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.8rem 1rem;
+        border-bottom: 1px solid #f1f5f9;
+        text-align: left;
+    }
+    .transactions-list-wrapper .trans-table tr:last-child, 
+    .transactions-list-wrapper .trans-table td:last-child {
+        border-bottom: none;
+    }
+    .transactions-list-wrapper .trans-table td::before {
+        content: attr(data-label);
+        font-weight: bold;
+        color: #334155;
+        padding-left: 0.5rem;
+    }
+    .transactions-list-wrapper .trans-table td[data-label="توضیحات"]:empty {
+        display: none;
+    }
+    .transactions-list-wrapper .trans-table .amount-wrap {
+        flex-direction: row-reverse;
+        font-weight: normal;
+    }
+
+    /* --- UX For Debtors Table (Fluid Responsive Table) --- */
+    .debtors-list-wrapper {
+        overflow-x: visible;
+        border: none;
+    }
+    .debtors-list-wrapper .trans-table {
+        table-layout: fixed;
+    }
+    .debtors-list-wrapper .trans-table th,
+    .debtors-list-wrapper .trans-table td {
+        /* --- CHANGE: Fine-tuning font, padding, and wrap behavior --- */
+        font-size: 0.92rem; /* Slightly smaller font to help fitting */
+        padding: 0.8rem 0.4rem; /* Reduce horizontal padding */
+        white-space: normal; /* Allow wrapping by default */
+        word-break: normal;
+    }
+
+    /* Allow only the Name column to wrap its text */
+    .debtors-list-wrapper .trans-table td:nth-child(1) {
+        word-break: break-word;
+    }
+    /* Prevent Phone and Debt columns from breaking */
+    .debtors-list-wrapper .trans-table td:nth-child(2),
+    .debtors-list-wrapper .trans-table td:nth-child(3) {
+        white-space: nowrap;
+    }
+}
