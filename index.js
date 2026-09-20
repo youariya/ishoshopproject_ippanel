@@ -28,6 +28,11 @@ const { getAllTransactions, addTransactionToCache, getTransactionsForPhone } = r
 const { fixNumbers, formatToJalali, addCommas, getCurrentTime, formatDateTime, getIranTime } = require('./helpers/utils');
 const smsService = require('./helpers/smsService');
 
+if (!process.env.SESSION_SECRET) {
+    console.error('❌ SESSION_SECRET در .env تنظیم نشده. یک مقدار تصادفی و یکتا برای این مشتری بسازید (مثلا: openssl rand -hex 32) — این مقدار هرگز نباید بین چند مشتری/استقرار مشترک باشد.');
+    process.exit(1);
+}
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 const APPSCRIPT_URL = process.env.APPSCRIPT_URL;
@@ -91,7 +96,7 @@ app.use(session({
     store: new MemoryStore({
         checkPeriod: 86400000 // پاک‌سازی هر 24 ساعت
     }),
-    secret: process.env.SESSION_SECRET || 'ishoshop-fallback-secret-2024',
+    secret: process.env.SESSION_SECRET,
     name: 'ishoshop_sid', // نام امن‌تر
     genid: () => crypto.randomBytes(32).toString('hex'), // ID قوی‌تر
     resave: false,
