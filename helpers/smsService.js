@@ -2,11 +2,9 @@ require('dotenv').config();
 const axios = require('axios');
 const { v4: uuidv4 } = require('uuid');
 const { formatToJalali, addCommas, getIranTime } = require('./utils');
-const fs = require('fs');
-const path = require('path');
+const clientConfig = require('../config/loadClientConfig');
 
 const APPSCRIPT_URL = process.env.APPSCRIPT_URL;
-const smsTemplates = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'smsTemplates.json'), 'utf8'));
 
 // انتخاب سرویس‌دهنده پیامک از طریق .env — مقادیر مجاز: kavenegar | ippanel
 const SMS_PROVIDER = (process.env.SMS_PROVIDER || 'kavenegar').toLowerCase();
@@ -18,8 +16,15 @@ const IPPANEL_API_KEY = process.env.IPPANEL_API_KEY;
 const IPPANEL_SENDER_NUMBER = process.env.IPPANEL_SENDER_NUMBER;
 const IPPANEL_SEND_URL = 'https://edge.ippanel.com/v1/api/send';
 // ایپی‌پانل پیامک‌های عملیاتی را فقط از طریق پترن‌های تاییدشده می‌پذیرد؛ کد هر پترن بعد از ساخت و تایید در پنل، اینجا تنظیم می‌شود
+const IPPANEL_PATTERN_WELCOME = process.env.IPPANEL_PATTERN_WELCOME;
 const IPPANEL_PATTERN_DEBT = process.env.IPPANEL_PATTERN_DEBT;
 const IPPANEL_PATTERN_PAYMENT = process.env.IPPANEL_PATTERN_PAYMENT;
+
+const IPPANEL_PATTERN_BY_TYPE = {
+    welcome: IPPANEL_PATTERN_WELCOME,
+    debt: IPPANEL_PATTERN_DEBT,
+    payment: IPPANEL_PATTERN_PAYMENT
+};
 
 // محدودیت تقسیم‌بندی درخواست‌های حجیم
 const CHUNK_SIZE = 200;
@@ -40,6 +45,15 @@ function chunkArray(array, size) {
  */
 function toE164(phone) {
     return phone.replace(/^0/, '+98');
+}
+
+/**
+ * جای‌گزینی متغیرهای {name}, {amount}, ... و {signature} در متن تعریف‌شده برای این مشتری
+ */
+function fillTemplate(template, values) {
+    return template
+        .replace(/{signature}/g, clientConfig.smsSignature || '')
+        .replace(/{(\w+)}/g, (match, key) => (key in values ? values[key] : match));
 }
 
 /**
@@ -162,38 +176,21 @@ async function sendSms(phone, message) {
 }
 
 /**
- * برای ارسال پیامک تراکنش (پرداخت یا بدهی)
- * روی ایپی‌پانل از پترن تاییدشده استفاده می‌شود؛ روی کاوه‌نگار همان متن آزاد قبلی ارسال می‌شود.
- * @param {string} type - نوع تراکنش ('paid' یا 'debt')
- * @param {object} customer - آبجکت مشتری
- * @param {number} amount - مبلغ تراکنش
- * @param {number} remainingDebt - مانده حساب جدید مشتری
- * @param {string} date - تاریخ تراکنش
+ * ارسال یک پیامک عملیاتی (خوشامدگویی/بدهی/پرداخت) طبق تعریف این مشتری در config/client.json
+ * اگر برای این مشتری غیرفعال باشد، هیچ درخواستی ارسال و لاگ نمی‌شود.
  */
-async function sendTransactionSms(type, customer, amount, remainingDebt, date) {
-    const templateKey = type === 'paid' ? 'payment' : 'debt';
-    const template = smsTemplates[templateKey];
-    if (!template) return;
+async function sendOperationalSms(type, customer, values) {
+    const templateConfig = clientConfig.sms?.[type];
+    if (!templateConfig || !templateConfig.enabled) return;
 
-    const messageForSms = template
-        .replace(/{name}/g, customer.name || 'مشتری')
-        .replace(/{amount}/g, addCommas(amount))
-        .replace(/{remaining_debt}/g, addCommas(remainingDebt))
-        .replace(/{date}/g, date);
-
+    const values_ = { name: customer.name || 'مشتری', ...values };
+    const messageForSms = fillTemplate(templateConfig.message, values_);
     const messageForLog = messageForSms.replace(/\n/g, ' | ');
 
     let result;
     if (SMS_PROVIDER === 'ippanel') {
-        const params = {
-            name: customer.name || 'مشتری',
-            amount: addCommas(amount),
-            remaining_debt: addCommas(remainingDebt)
-        };
-        if (type === 'paid') params.date = date;
-
-        const patternCode = type === 'paid' ? IPPANEL_PATTERN_PAYMENT : IPPANEL_PATTERN_DEBT;
-        result = await sendViaIppanelPattern(customer.phone, patternCode, params);
+        const patternCode = IPPANEL_PATTERN_BY_TYPE[type];
+        result = await sendViaIppanelPattern(customer.phone, patternCode, values_);
     } else {
         result = await sendViaKavenegar(customer.phone, messageForSms);
     }
@@ -210,6 +207,29 @@ async function sendTransactionSms(type, customer, amount, remainingDebt, date) {
     });
 }
 
+/**
+ * برای ارسال پیامک خوشامدگویی؛ اگر برای این مشتری در config/client.json غیرفعال باشد، کاری انجام نمی‌شود
+ */
+async function sendWelcomeSms(customer) {
+    await sendOperationalSms('welcome', customer, {});
+}
+
+/**
+ * برای ارسال پیامک تراکنش (پرداخت یا بدهی)
+ * @param {string} type - نوع تراکنش ('paid' یا 'debt')
+ * @param {object} customer - آبجکت مشتری
+ * @param {number} amount - مبلغ تراکنش
+ * @param {number} remainingDebt - مانده حساب جدید مشتری
+ * @param {string} date - تاریخ تراکنش
+ */
+async function sendTransactionSms(type, customer, amount, remainingDebt, date) {
+    const templateKey = type === 'paid' ? 'payment' : 'debt';
+    const values = { amount: addCommas(amount), remaining_debt: addCommas(remainingDebt) };
+    if (templateKey === 'payment') values.date = date;
+
+    await sendOperationalSms(templateKey, customer, values);
+}
+
 async function sendBulkSms(customers, bodyMessage) {
     if (!customers || !Array.isArray(customers) || customers.length === 0) {
         throw new Error('آرایه مشتریان نمی‌تواند خالی باشد.');
@@ -224,7 +244,7 @@ async function sendBulkSms(customers, bodyMessage) {
 
     // ارسال یکی‌یکی، مطابق منطق اصلی
     for (const customer of customers) {
-        const finalMessage = `${customer.name || 'مشتری'} عزیز\n${bodyMessage}\n👗پوشاک مهر ؛ ۲۷سال همراهی باسلیقه بانوان شهرم🛍`;
+        const finalMessage = `${customer.name || 'مشتری'} عزیز\n${bodyMessage}\n${clientConfig.smsSignature || ''}`;
 
         const result = await sendSms(customer.phone, finalMessage);
 
@@ -273,6 +293,7 @@ async function sendAdminSmsAlert(alertMessage) {
 }
 
 module.exports = {
+    sendWelcomeSms,
     sendBulkSms,
     sendTransactionSms,
     sendAdminSmsAlert

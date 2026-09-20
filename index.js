@@ -7,14 +7,17 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const axios = require('axios');
 const helmet = require('helmet');
+const compression = require('compression');
 const session = require('express-session');
 const rateLimit = require('express-rate-limit');
 const path = require('path');
+const fs = require('fs');
 const { parse } = require('date-fns-jalali');
 const cookieParser = require('cookie-parser');
 const csurf = require('csurf');
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
+const clientConfig = require('./config/loadClientConfig');
 
 // 🔥 اضافه کردن MemoryStore جدید
 const MemoryStore = require('memorystore')(session);
@@ -54,8 +57,33 @@ app.use(helmet({
     hsts: false
 }));
 
+// 🔥 فشرده‌سازی gzip برای همه‌ی پاسخ‌ها — کاهش پهنای‌باند و مصرف CPU شبکه
+app.use(compression());
+
 app.use(bodyParser.json());
-app.use(express.static(path.join(__dirname, 'public')));
+
+// صفحاتی که برای این مشتری متغیر دارند (نام کسب‌وکار/امضای پیامک)، یک‌بار در لحظه بالا آمدن سرور
+// از روی config/client.json رندر و در حافظه نگه‌داری می‌شوند — هزینه‌ی هر درخواست دقیقاً برابر فایل استاتیک است.
+const renderedPages = {
+    '/dashboard/dashboard.html': fs.readFileSync(path.join(__dirname, 'public', 'dashboard', 'dashboard.html'), 'utf8')
+        .replace(/{{BUSINESS_NAME}}/g, clientConfig.businessName || ''),
+    '/bulksms/bulkSMSForm.html': fs.readFileSync(path.join(__dirname, 'public', 'bulksms', 'bulkSMSForm.html'), 'utf8')
+        .replace(/{{SMS_SIGNATURE}}/g, clientConfig.smsSignature || '')
+};
+
+app.get(Object.keys(renderedPages), (req, res) => {
+    res.type('html').send(renderedPages[req.path]);
+});
+
+// فایل‌های ایستا (css/js/فونت/تصویر) مدت طولانی کش می‌شوند چون به‌ندرت تغییر می‌کنند؛
+// این کار بار سرور را روی بازدیدهای بعدی به‌طور محسوس کم می‌کند
+app.use(express.static(path.join(__dirname, 'public'), {
+    setHeaders: (res, filePath) => {
+        if (/\.(css|js|woff2?|svg|png|jpg|jpeg)$/i.test(filePath)) {
+            res.setHeader('Cache-Control', 'public, max-age=2592000, immutable'); // ۳۰ روز
+        }
+    }
+}));
 app.use(cookieParser());
 
 // 🔥 بهبود Session Configuration
@@ -320,6 +348,7 @@ app.post('/api/customer', async (req, res) => {
                 data: { name: newCustomer.name, phone: newCustomer.phone, initialDebt: numericInitialDebt },
                 customerName: newCustomer.name
             });
+            smsService.sendWelcomeSms({ name: newCustomer.name, phone: newCustomer.phone });
         });
     } catch (error) {
         console.error("خطا در ثبت مشتری:", error);

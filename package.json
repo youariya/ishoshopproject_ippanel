@@ -23,6 +23,7 @@
     "axios": "^1.6.2",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.2",
+    "compression": "^1.8.2",
     "cookie-parser": "^1.4.6",
     "csurf": "^1.11.0",
     "date-fns": "^2.30.0",

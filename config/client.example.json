@@ -1,0 +1,18 @@
+{
+  "businessName": "نام فروشگاه یا کسب‌وکار شما",
+  "smsSignature": "🛍 امضای پیامک شما 🛍",
+  "sms": {
+    "welcome": {
+      "enabled": true,
+      "message": "{name} گرامی\nخوش‌آمدید، از همراهی شما خوشحالیم\n{signature}"
+    },
+    "debt": {
+      "enabled": true,
+      "message": "{name} گرامی خرید شما به مبلغ {amount} تومان ثبت شد. مبلغ باقی مانده از کل حساب شما {remaining_debt} تومان می باشد.\n{signature}"
+    },
+    "payment": {
+      "enabled": true,
+      "message": "{name} گرامی پرداخت وجه در تاریخ {date} با موفقیت ثبت شد. مبلغ پرداخت شده: {amount} تومان مبلغ باقی مانده: {remaining_debt} تومان\n{signature}"
+    }
+  }
+}
