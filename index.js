@@ -320,7 +320,6 @@ app.post('/api/customer', async (req, res) => {
                 data: { name: newCustomer.name, phone: newCustomer.phone, initialDebt: numericInitialDebt },
                 customerName: newCustomer.name
             });
-            smsService.sendWelcomeSms({ name: newCustomer.name, phone: newCustomer.phone });
         });
     } catch (error) {
         console.error("خطا در ثبت مشتری:", error);

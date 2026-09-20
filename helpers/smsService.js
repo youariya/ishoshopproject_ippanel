@@ -17,6 +17,9 @@ const KAVEHNEGAR_SENDER_LINE = process.env.KAVENEGAR_SENDER_LINE;
 const IPPANEL_API_KEY = process.env.IPPANEL_API_KEY;
 const IPPANEL_SENDER_NUMBER = process.env.IPPANEL_SENDER_NUMBER;
 const IPPANEL_SEND_URL = 'https://edge.ippanel.com/v1/api/send';
+// ایپی‌پانل پیامک‌های عملیاتی را فقط از طریق پترن‌های تاییدشده می‌پذیرد؛ کد هر پترن بعد از ساخت و تایید در پنل، اینجا تنظیم می‌شود
+const IPPANEL_PATTERN_DEBT = process.env.IPPANEL_PATTERN_DEBT;
+const IPPANEL_PATTERN_PAYMENT = process.env.IPPANEL_PATTERN_PAYMENT;
 
 // محدودیت تقسیم‌بندی درخواست‌های حجیم
 const CHUNK_SIZE = 200;
@@ -30,6 +33,13 @@ function chunkArray(array, size) {
         chunkedArr.push(array.slice(i, i + size));
     }
     return chunkedArr;
+}
+
+/**
+ * شماره موبایل ایرانی (09xxxxxxxxx) را به فرمت بین‌المللی مورد نیاز ایپی‌پانل (+98xxxxxxxxxx) تبدیل می‌کند
+ */
+function toE164(phone) {
+    return phone.replace(/^0/, '+98');
 }
 
 /**
@@ -71,7 +81,7 @@ async function sendViaKavenegar(phone, message) {
 }
 
 /**
- * ارسال یک پیامک از طریق وب‌سرویس ایپی‌پانل (مدیرپیامک)
+ * ارسال یک پیامک آزاد از طریق وب‌سرویس ایپی‌پانل (برای متن‌های دستی/گروهی که پترن ندارند)
  */
 async function sendViaIppanel(phone, message) {
     try {
@@ -79,7 +89,7 @@ async function sendViaIppanel(phone, message) {
             sending_type: 'webservice',
             from_number: IPPANEL_SENDER_NUMBER,
             message,
-            params: { recipients: [phone] }
+            params: { recipients: [toE164(phone)] }
         }, {
             headers: { Authorization: IPPANEL_API_KEY, 'Content-Type': 'application/json' }
         });
@@ -104,7 +114,45 @@ async function sendViaIppanel(phone, message) {
 }
 
 /**
- * ارسال یک پیامک از طریق سرویس‌دهنده انتخاب‌شده در SMS_PROVIDER
+ * ارسال یک پیامک از طریق یک پترن تاییدشده ایپی‌پانل (برای پیامک‌های عملیاتی)
+ */
+async function sendViaIppanelPattern(phone, code, params) {
+    if (!code) {
+        return { success: false, messageId: undefined, code: 'no_pattern', message: 'کد پترن در .env تنظیم نشده است.' };
+    }
+
+    try {
+        const response = await axios.post(IPPANEL_SEND_URL, {
+            sending_type: 'pattern',
+            from_number: IPPANEL_SENDER_NUMBER,
+            code,
+            recipients: [toE164(phone)],
+            params
+        }, {
+            headers: { Authorization: IPPANEL_API_KEY, 'Content-Type': 'application/json' }
+        });
+
+        const meta = response.data?.meta || {};
+        return {
+            success: meta.status === true,
+            messageId: response.data?.data?.message_outbox_ids?.[0],
+            code: meta.message_code || (meta.status ? '200' : '500'),
+            message: meta.message || ''
+        };
+    } catch (err) {
+        const meta = err.response?.data?.meta;
+        console.error('ippanel Pattern SMS Error:', meta?.message || err.message);
+        return {
+            success: false,
+            messageId: undefined,
+            code: meta?.message_code || String(err.response?.status || 500),
+            message: meta?.message || err.message
+        };
+    }
+}
+
+/**
+ * ارسال یک پیامک آزاد از طریق سرویس‌دهنده انتخاب‌شده در SMS_PROVIDER (بدون پترن)
  */
 async function sendSms(phone, message) {
     if (SMS_PROVIDER === 'ippanel') {
@@ -114,28 +162,8 @@ async function sendSms(phone, message) {
 }
 
 /**
- * برای ارسال پیامک خوشامدگویی (اصلاح شده برای ثبت قطعی لاگ)
- */
-async function sendWelcomeSms(customer) {
-    const messageForSms = smsTemplates.welcome.replace('{name}', customer.name || 'مشتری');
-    const messageForLog = messageForSms.replace(/\n/g, ' | ');
-
-    const result = await sendSms(customer.phone, messageForSms);
-
-    // این بخش همیشه اجرا می‌شود، چه موفق و چه ناموفق
-    logSms('logSingleSMS', {
-        smsId: result.messageId || uuidv4(),
-        phone: customer.phone,
-        name: customer.name || '',
-        message: messageForLog,
-        date: formatToJalali(getIranTime()),
-        wsApiCode: result.code,
-        smsApiMessage: result.message
-    });
-}
-
-/**
  * برای ارسال پیامک تراکنش (پرداخت یا بدهی)
+ * روی ایپی‌پانل از پترن تاییدشده استفاده می‌شود؛ روی کاوه‌نگار همان متن آزاد قبلی ارسال می‌شود.
  * @param {string} type - نوع تراکنش ('paid' یا 'debt')
  * @param {object} customer - آبجکت مشتری
  * @param {number} amount - مبلغ تراکنش
@@ -155,7 +183,20 @@ async function sendTransactionSms(type, customer, amount, remainingDebt, date) {
 
     const messageForLog = messageForSms.replace(/\n/g, ' | ');
 
-    const result = await sendSms(customer.phone, messageForSms);
+    let result;
+    if (SMS_PROVIDER === 'ippanel') {
+        const params = {
+            name: customer.name || 'مشتری',
+            amount: addCommas(amount),
+            remaining_debt: addCommas(remainingDebt)
+        };
+        if (type === 'paid') params.date = date;
+
+        const patternCode = type === 'paid' ? IPPANEL_PATTERN_PAYMENT : IPPANEL_PATTERN_DEBT;
+        result = await sendViaIppanelPattern(customer.phone, patternCode, params);
+    } else {
+        result = await sendViaKavenegar(customer.phone, messageForSms);
+    }
 
     // این بخش همیشه اجرا می‌شود، چه موفق و چه ناموفق
     logSms('logSingleSMS', {
@@ -183,7 +224,7 @@ async function sendBulkSms(customers, bodyMessage) {
 
     // ارسال یکی‌یکی، مطابق منطق اصلی
     for (const customer of customers) {
-        const finalMessage = `${customer.name || 'مشتری'} عزیز\n${bodyMessage}\nگالری کیف و کفش آی شو شاپ`;
+        const finalMessage = `${customer.name || 'مشتری'} عزیز\n${bodyMessage}\n👗پوشاک مهر ؛ ۲۷سال همراهی باسلیقه بانوان شهرم🛍`;
 
         const result = await sendSms(customer.phone, finalMessage);
 
@@ -232,7 +273,6 @@ async function sendAdminSmsAlert(alertMessage) {
 }
 
 module.exports = {
-    sendWelcomeSms,
     sendBulkSms,
     sendTransactionSms,
     sendAdminSmsAlert
