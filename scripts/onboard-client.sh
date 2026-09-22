@@ -62,12 +62,13 @@ fs.writeFileSync('config/client.json', JSON.stringify(cfg, null, 2));
 " "$BUSINESS_NAME" "$SMS_SIGNATURE"
 
 echo ""
-echo "⚠️  قبل از ادامه، این دو فایل را دستی تکمیل کنید:"
-echo "   1) $TARGET_DIR/.env"
-echo "      - کلید API سرویس پیامک ($SMS_PROVIDER)، ADMIN_PHONE_NUMBER، APPSCRIPT_URL (گوگل شیت مخصوص همین مشتری)"
-echo "   2) $TARGET_DIR/config/client.json"
+echo "⚠️  قبل از ادامه:"
+echo "   0) طبق $TARGET_DIR/gas/README.md یک Google Sheet جدید اختصاصی همین مشتری بسازید و Code.gs را دیپلوی کنید — آدرس exec را نگه دارید"
+echo "   1) $TARGET_DIR/.env را کامل کنید:"
+echo "      - کلید API سرویس پیامک ($SMS_PROVIDER)، ADMIN_PHONE_NUMBER، APPSCRIPT_URL (همان آدرس exec مرحله‌ی قبل)، DEFAULT_TEMP_PASSWORD"
+echo "   2) $TARGET_DIR/config/client.json را کامل کنید:"
 echo "      - متن دقیق و enabled/disabled هرکدام از پیامک‌های خوشامدگویی/بدهی/پرداخت برای این مشتری"
-read -rp "بعد از تکمیل این دو فایل، Enter بزنید تا ادامه پیدا کند... "
+read -rp "بعد از تکمیل این مراحل، Enter بزنید تا ادامه پیدا کند... "
 
 echo ""
 echo "== راه‌اندازی با PM2 =="
