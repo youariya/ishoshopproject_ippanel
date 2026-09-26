@@ -197,13 +197,15 @@ app.post('/login', loginLimiter, async (req, res) => {
             return res.status(401).json({ status: 'error', message: 'نام کاربری یا رمز عبور اشتباه است.' });
         }
         
-        const isFirstLogin = !user.passwordHash || user.passwordHash.trim() === '';
+        // مقدار passwordHash از گوگل‌شیت گاهی به‌جای متن، عدد/بولین برمی‌گردد؛ همیشه به رشته تبدیل می‌کنیم
+        const passwordHash = user.passwordHash != null ? String(user.passwordHash) : '';
+        const isFirstLogin = passwordHash.trim() === '';
         let passwordMatch = false;
-        
+
         if (isFirstLogin) {
             passwordMatch = (password === process.env.DEFAULT_TEMP_PASSWORD);
         } else {
-            passwordMatch = await bcrypt.compare(password, user.passwordHash);
+            passwordMatch = await bcrypt.compare(password, passwordHash);
         }
         
         if (!passwordMatch) {
