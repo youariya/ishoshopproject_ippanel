@@ -9,7 +9,7 @@ const axios = require('axios');
 const clientConfig = require('../config/loadClientConfig');
 
 const IPPANEL_API_KEY = process.env.IPPANEL_API_KEY;
-const CREATE_PATTERN_URL = 'https://edge.ippanel.com/v1/api/user/pattern';
+const CREATE_PATTERN_URL = 'https://edge.ippanel.com/v1/api/patterns/normal';
 
 const VARIABLE_TYPES = {
     name: 'string',
