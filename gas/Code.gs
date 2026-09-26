@@ -20,6 +20,15 @@ const SHEET_SCHEMAS = {
   SmsLog: ['timestamp', 'smsId', 'phone', 'name', 'message', 'date', 'wsApiCode', 'smsApiMessage']
 };
 
+// این ستون‌ها باید همیشه متن ساده (Plain Text) بمانند، وگرنه گوگل‌شیت آن‌ها را
+// خودکار به عدد یا تاریخ واقعی تبدیل می‌کند (مثلاً شماره موبایل صفر ابتدایی‌اش را
+// از دست می‌دهد، یا تاریخ شمسی "1405/07/05" به‌عنوان یک تاریخ میلادی واقعی خوانده می‌شود)
+const TEXT_COLUMNS = {
+  Customers: ['phone', 'date'],
+  Transactions: ['phone', 'date', 'time'],
+  SmsLog: ['phone', 'date']
+};
+
 /**
  * ساخت شیت‌ها و هدرهای لازم. امن برای اجرای چندباره: اگر شیتی با داده وجود داشته باشد
  * و هدرش با ساختار زیر یکی نباشد، دست‌کاریش نمی‌کند و فقط در Log هشدار می‌دهد.
@@ -50,6 +59,18 @@ function setup() {
       .setHorizontalAlignment('center');
     sheet.setFrozenRows(1);
     sheet.autoResizeColumns(1, headers.length);
+  });
+
+  // ستون‌های شماره/تاریخ را Plain Text می‌کنیم (روی شیت‌های جدید و موجود، هر بار امن است)
+  Object.keys(TEXT_COLUMNS).forEach(name => {
+    const sheet = ss.getSheetByName(name);
+    if (!sheet) return;
+    const headers = SHEET_SCHEMAS[name];
+    TEXT_COLUMNS[name].forEach(colName => {
+      const colIndex = headers.indexOf(colName);
+      if (colIndex === -1) return;
+      sheet.getRange(1, colIndex + 1, sheet.getMaxRows(), 1).setNumberFormat('@');
+    });
   });
 
   // حذف شیت پیش‌فرض خالی که گوگل موقع ساخت شیت جدید اضافه می‌کند
