@@ -141,8 +141,18 @@ function sheetToObjects(sheet) {
     });
 }
 
-function appendObjectRow(sheet, headers, obj) {
-  const row = headers.map(h => (obj[h] !== undefined && obj[h] !== null) ? obj[h] : '');
+function appendObjectRow(sheet, headers, obj, sheetName) {
+  // برای ستون‌های TEXT_COLUMNS، مقدار را با یک آپاستروف شروع می‌کنیم تا گوگل‌شیت
+  // مجبور شود آن را متن خام در نظر بگیرد (همان قراردادی که گوگل‌شیت برای ورودی دستی هم
+  // استفاده می‌کند)؛ فقط تکیه به فرمت‌کردن ستون برای نوشتن خودکار از طریق appendRow کافی نیست.
+  const forceText = TEXT_COLUMNS[sheetName] || [];
+  const row = headers.map(h => {
+    const value = (obj[h] !== undefined && obj[h] !== null) ? obj[h] : '';
+    if (forceText.indexOf(h) !== -1 && value !== '') {
+      return "'" + value;
+    }
+    return value;
+  });
   sheet.appendRow(row);
 }
 
@@ -159,15 +169,15 @@ function handleGetAllTransactions() {
 // --- نوشتن ---
 
 function handleProcessNewCustomer(req) {
-  appendObjectRow(getSheet('Customers'), SHEET_SCHEMAS.Customers, req.customer);
+  appendObjectRow(getSheet('Customers'), SHEET_SCHEMAS.Customers, req.customer, 'Customers');
   if (req.transaction) {
-    appendObjectRow(getSheet('Transactions'), SHEET_SCHEMAS.Transactions, req.transaction);
+    appendObjectRow(getSheet('Transactions'), SHEET_SCHEMAS.Transactions, req.transaction, 'Transactions');
   }
   return jsonResponse({ status: 'success' });
 }
 
 function handleProcessTransaction(req) {
-  appendObjectRow(getSheet('Transactions'), SHEET_SCHEMAS.Transactions, req.transaction);
+  appendObjectRow(getSheet('Transactions'), SHEET_SCHEMAS.Transactions, req.transaction, 'Transactions');
   // نکته: Node فقط ردیف تراکنش را می‌فرستد، نه آپدیت مشتری — پس این تنها جایی است که
   // ستون debt در شیت Customers به‌روز می‌شود. بدون این، مانده بدهی در شیت هیچ‌وقت واقعی نمی‌ماند.
   updateCustomerDebt(req.transaction.customerId, req.transaction.remainDebt, req.transaction.date);
@@ -184,7 +194,7 @@ function updateCustomerDebt(customerId, newDebt, newDate) {
   for (let r = 1; r < values.length; r++) {
     if (String(values[r][idCol]) === String(customerId)) {
       sheet.getRange(r + 1, debtCol + 1).setValue(newDebt);
-      sheet.getRange(r + 1, dateCol + 1).setValue(newDate);
+      sheet.getRange(r + 1, dateCol + 1).setValue(newDate !== '' ? "'" + newDate : newDate);
       return;
     }
   }
@@ -217,7 +227,7 @@ function handleLogError(req) {
     operation: req.operation,
     data: JSON.stringify(req.data),
     errorMessage: req.errorMessage
-  });
+  }, 'ErrorLog');
   return jsonResponse({ status: 'success' });
 }
 
@@ -231,7 +241,7 @@ function handleLogSingleSms(req) {
     date: req.date,
     wsApiCode: req.wsApiCode,
     smsApiMessage: req.smsApiMessage
-  });
+  }, 'SmsLog');
   return jsonResponse({ status: 'success' });
 }
 
@@ -247,7 +257,7 @@ function handleLogBulkSms(req) {
       date: log.date,
       wsApiCode: log.wsApiCode,
       smsApiMessage: log.smsApiMessage
-    });
+    }, 'SmsLog');
   });
   return jsonResponse({ status: 'success' });
 }
